@@ -15,11 +15,15 @@ root.render(
       <Route path='/' element={<App></App>}>
         <Route index element={<Home></Home>}></Route>
         <Route path='/users' element={<User></User>}></Route>
+      </Route>
+      <Route>
         <Route path='/admin' element={<Admin></Admin>}></Route>
       </Route>
 
+
+
     </Routes>
-  </BrowserRouter>
+  </BrowserRouter >
 );
 
 // If you want to start measuring performance in your app, pass a function
