@@ -1,0 +1,62 @@
+@media (min-width: 1500px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl{
+        max-width: 1450px !important;
+    }  
+}
+
+
+
+
+.app-container{   
+    .header-container{
+        font-size: 25px;
+        font-weight: 600;
+            .navbar{
+                padding-top: 30px;
+                z-index: 10;
+                background-color: rgba(0,0,0,0) !important ;
+                .nav-link{
+                    &.active{
+                        color: aquamarine;
+                    }
+                }
+        } 
+    }
+
+    .homepage-container{
+        .homepage-content{           
+            padding-top: 45px;
+            padding-left: 45px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            .title-1{
+                font-size: 70px;
+                font-weight: 600;
+            }
+            .title-2{
+                font-size: 30px;
+                font-weight: 300;
+            }
+            .btn-title-3{
+                padding: 20px;
+                background-color: black;
+                color: white;
+                border-radius: 15px;
+            }
+            
+            
+            
+
+
+        }
+    }
+}
+
+.video{
+    width: 100vw;
+    position: fixed;
+    bottom: 0;
+}
