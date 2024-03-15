@@ -1,6 +1,8 @@
 import { useState } from "react";
 import SideBar from "./Sidebar";
-import "./Admin.scss"
+import "./Admin.scss";
+import { FaBarsProgress } from "react-icons/fa6";
+import { Outlet } from "react-router-dom";
 const Admin = () => {
     const [state, setState] = useState(true);
 
@@ -14,7 +16,10 @@ const Admin = () => {
                     <SideBar state={state}></SideBar>
                 </div>
                 <div className="admin-content">
-                    <button onClick={handleClick}>Add</button>
+                    <div className="admin-header">
+                        <FaBarsProgress onClick={handleClick} size={24}></FaBarsProgress>
+                    </div>
+                    <div className="admin-main"><Outlet></Outlet></div>
                 </div>
             </div>
         </>

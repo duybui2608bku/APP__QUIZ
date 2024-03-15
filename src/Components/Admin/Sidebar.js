@@ -7,6 +7,7 @@ import { FcBusiness } from "react-icons/fc";
 import { FcQuestions } from "react-icons/fc";
 import { FcCurrencyExchange } from "react-icons/fc";
 import "./Sidebar.scss"
+import { NavLink } from 'react-router-dom';
 const SideBar = (props) => {
     const { state } = props;
     return (
@@ -17,7 +18,7 @@ const SideBar = (props) => {
                     DUY BKU </MenuItem>
                 <MenuItem icon={<FcCurrencyExchange size={24} />} >  Dashboard </MenuItem>
                 <SubMenu label="Tính Năng" icon={<MdFeaturedPlayList size={24} />} >
-                    <MenuItem icon={<FcConferenceCall size={24} />}> Quản Lí User</MenuItem>
+                    <MenuItem component={<NavLink to="manager-user"></NavLink>} icon={<FcConferenceCall size={24} />}>Quản Lí User</MenuItem>
                     <MenuItem icon={<FcBusiness size={24} />}> Quản Lí Bài Quiz </MenuItem>
                     <MenuItem icon={<FcQuestions size={24} />}> Quản Lí Câu Hỏi </MenuItem>
                 </SubMenu>
