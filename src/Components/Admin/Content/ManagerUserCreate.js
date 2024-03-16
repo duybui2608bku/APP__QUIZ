@@ -3,10 +3,10 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FcPlus } from "react-icons/fc";
 import "./ManagerUserCreate.scss";
-import axios from 'axios';
+import { toast } from 'react-toastify';
+import { postCreateUser } from '../../../Service/ApiServeice';
 const ManagerUserCreate = (props) => {
     const { show, setShow } = props;
-    // const [show, setShow] = useState(false);
 
     const [email, setEmail] = useState("");
     const [password, setPasswrod] = useState("");
@@ -24,7 +24,15 @@ const ManagerUserCreate = (props) => {
         }
     }
 
-    console.log(image);
+    //Regex email
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
+
     const handleClose = () => {
         setShow(false);
         setEmail("");
@@ -34,25 +42,39 @@ const ManagerUserCreate = (props) => {
         setImage("");
         setPreviewImage('')
     };
-    const handleShow = () => setShow(true);
+    // const handleShow = () => setShow(true);
     const handleSubmit = async () => {
-        // let data = {
-        //     email: email,
-        //     password: password,
-        //     username: user,
-        //     role: role,
-        //     userImage: image
-        // }
-        const data = new FormData();
-        data.append('email', email);
-        data.append('password', password);
-        data.append('username', user);
-        data.append('role', role);
-        data.append('userImage', image);
-        let res = await axios.post('http://localhost:8081/api/v1/participant', data);
-        console.log(res);
-    }
 
+        //Validate Email
+        const isValidateEmail = validateEmail(email);
+        if (!isValidateEmail) {
+            toast.error("Invalid Email");
+            return;
+        }
+        //Validate Password
+
+        if (!password) {
+            toast.error("Please input password");
+            return;
+        }
+
+        //Validate User 
+
+        if (!user) {
+            toast.error("Please input user name");
+            return;
+        }
+
+        let data = await postCreateUser(email, password, user, role, image);
+        if (data && data.EC === 0) {
+            toast.success("Create user success");
+            handleClose();
+        }
+
+        if (data && data.EC !== 0) {
+            toast.error(data.EM);
+        }
+    }
 
 
     return (

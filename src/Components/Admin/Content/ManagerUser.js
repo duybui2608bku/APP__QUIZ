@@ -1,6 +1,7 @@
 import ManagerUserCreate from "./ManagerUserCreate";
 import "./ManagerUser.scss";
 import { useState } from "react";
+import TableUser from "./TableUser";
 const ManageUser = () => {
     const [showModelCreateUser, setShowModelCreateUser] = useState(false);
     return (
@@ -14,7 +15,7 @@ const ManageUser = () => {
                         <button className="btn btn-primary" onClick={() => setShowModelCreateUser(true)}>Add New User</button>
                     </div>
                     <div className="table-user-container">
-                        Table-User
+                        <TableUser></TableUser>
                     </div>
                     <div>
                         <ManagerUserCreate
