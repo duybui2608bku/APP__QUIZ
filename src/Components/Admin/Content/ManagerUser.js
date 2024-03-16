@@ -3,9 +3,12 @@ import "./ManagerUser.scss";
 import TableUser from "./TableUser";
 import { useEffect, useState } from "react";
 import { getAllUser } from "../../../Service/ApiServeice";
+import ModaleUpdateUser from "./ModalUpdateUser";
 const ManageUser = () => {
     const [listUser, setListUser] = useState([]);
     const [showModelCreateUser, setShowModelCreateUser] = useState(false);
+    const [showModeUpdateUser, setShowModeUpdateUser] = useState(false);
+    const [dataUpdate, setDataUpdate] = useState({});
     useEffect(() => {
         fetchApi();
     }, []);
@@ -15,6 +18,11 @@ const ManageUser = () => {
         if (res.EC === 0) {
             setListUser(res.DT);
         }
+    }
+
+    const handleClickUpdate = (user) => {
+        setShowModeUpdateUser(true);
+        setDataUpdate(user);
     }
 
     return (
@@ -28,7 +36,9 @@ const ManageUser = () => {
                         <button className="btn btn-primary" onClick={() => setShowModelCreateUser(true)}>Add New User</button>
                     </div>
                     <div className="table-user-container">
-                        <TableUser listUser={listUser}></TableUser>
+                        <TableUser listUser={listUser}
+                            handleClickUpdate={handleClickUpdate}
+                        ></TableUser>
                     </div>
                     <div>
                         <ManagerUserCreate
@@ -36,6 +46,12 @@ const ManageUser = () => {
                             setShow={setShowModelCreateUser}
                             fetListUser={fetchApi}
                         ></ManagerUserCreate>
+                        <ModaleUpdateUser
+                            show={showModeUpdateUser}
+                            setShow={setShowModeUpdateUser}
+                            fetListUser={fetchApi}
+                            dataUpdate={dataUpdate}
+                        ></ModaleUpdateUser>
                     </div>
                 </div>
             </div>
