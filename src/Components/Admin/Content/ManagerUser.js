@@ -1,14 +1,16 @@
+import ManagerUserCreate from "./ManagerUserCreate";
+
 const ManageUser = () => {
     return (
         <>
-            <div classNameName="manage-user-container">
-                <div classNameName="title">
-                    <div classNameName="users-content">
+            <div className="manage-user-container">
+                <div className="title">
+                    <div className="users-content">
                         <div>
                             <button>Add User</button>
                         </div>
                         <div>
-                            <ManageUser></ManageUser>
+                            <ManagerUserCreate></ManagerUserCreate>
                         </div>
                     </div>
                 </div>
