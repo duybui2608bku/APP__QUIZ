@@ -6,8 +6,8 @@ import "./ManagerUserCreate.scss";
 import { toast } from 'react-toastify';
 import { postCreateUser } from '../../../Service/ApiServeice';
 const ManagerUserCreate = (props) => {
-    const { show, setShow } = props;
-
+    const { show, setShow, fetListUser } = props;
+    console.log(fetListUser);
     const [email, setEmail] = useState("");
     const [password, setPasswrod] = useState("");
     const [user, setUser] = useState("");
@@ -69,6 +69,7 @@ const ManagerUserCreate = (props) => {
         if (data && data.EC === 0) {
             toast.success("Create user success");
             handleClose();
+            await fetListUser();
         }
 
         if (data && data.EC !== 0) {
