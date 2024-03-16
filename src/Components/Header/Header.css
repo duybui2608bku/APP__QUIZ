@@ -1,0 +1,18 @@
+.btn-login{
+    margin-right: 40px;
+    border-radius: 15px;
+    padding: 10px;
+    background-color: rgba(0,0,0,0);
+}
+
+.btn-signUp{
+    margin-right: 20px;
+    border-radius: 15px;
+    padding: 10px;
+    background-color:rgb(25, 25, 25);
+    color: white;
+}
+
+.btn-signUp:hover{
+    background-color:rgb(53, 49, 49);
+}
