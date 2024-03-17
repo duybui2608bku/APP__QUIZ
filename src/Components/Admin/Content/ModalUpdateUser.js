@@ -20,7 +20,7 @@ const ModaleUpdateUser = (props) => {
             setEmail(dataUpdate.email);
             setUser(dataUpdate.username);
             setRole(dataUpdate.role);
-            setImage('');
+            setImage(dataUpdate.image);
             if (dataUpdate.image) {
                 setPreviewImage(`data:image/jpeg;base64,${dataUpdate.image}`);
 
@@ -37,15 +37,6 @@ const ModaleUpdateUser = (props) => {
         }
     }
 
-    //Regex email
-    // const validateEmail = (email) => {
-    //     return String(email)
-    //         .toLowerCase()
-    //         .match(
-    //             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    //         );
-    // };
-
     const handleClose = () => {
         setShow(false);
         setEmail("");
@@ -55,23 +46,8 @@ const ModaleUpdateUser = (props) => {
         setImage("");
         setPreviewImage('')
     };
-    // const handleShow = () => setShow(true);
     const handleSubmit = async () => {
 
-        //Validate Email
-        // const isValidateEmail = validateEmail(email);
-        // if (!isValidateEmail) {
-        //     toast.error("Invalid Email");
-        //     return;
-        // }
-        //Validate Password
-
-        // if (!password) {
-        //     toast.error("Please input password");
-        //     return;
-        // }
-
-        //Validate User 
 
         if (!user) {
             toast.error("Please input user name");
@@ -117,7 +93,7 @@ const ModaleUpdateUser = (props) => {
                         </div>
                         <div className="col-md-6">
                             <label className="form-label">State</label>
-                            <select className="form-select" onChange={(e) => setRole(e.target.value)}>
+                            <select value={dataUpdate.role} className="form-select" onChange={(e) => setRole(e.target.value)}>
                                 <option value="ADMIN">ADMIN</option>
                                 <option value="USER">USER</option>
                             </select>

@@ -21,4 +21,12 @@ const putUpdateUser = (id, user, role, image) => {
     data.append('userImage', image);
     return axios.put('api/v1/participant', data);
 }
-export { postCreateUser, getAllUser, putUpdateUser };
+
+const deleteUser = (id) => {
+    const data = new FormData();
+    data.append('id', id);
+    return axios.delete('api/v1/participant', data);
+}
+
+
+export { postCreateUser, getAllUser, putUpdateUser, deleteUser };
