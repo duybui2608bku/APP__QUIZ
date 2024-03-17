@@ -5,20 +5,20 @@ import "./ManagerUserCreate.scss";
 import { toast } from 'react-toastify';
 import { deleteUser } from '../../../Service/ApiServeice';
 const ManagerDeleteUser = (props) => {
-    const { show, setShow, user } = props;
+    const { show, setShow, user, fetListUser } = props;
     const [previewImage, setPreviewImage] = useState("");
 
-    // const handleSubmit = async () => {
-    //     let data = await deleteUser(user);
-    //     if (data && data.EC === 0) {
-    //         toast.success(data.EM);
-    //         handleClose();
-    //     }
-    //     if (data && data.EC !== 0) {
-    //         toast.error(data.EM);
-    //     }
-    // }
-    console.log(user.id);
+    const handleSubmit = async () => {
+        let data = await deleteUser(user.id);
+        if (data && data.EC === 0) {
+            toast.success(data.EM);
+            handleClose();
+            await fetListUser();
+        }
+        if (data && data.EC !== 0) {
+            toast.error(data.EM);
+        }
+    }
 
     const handleClose = () => setShow(false);
     return (
@@ -36,7 +36,9 @@ const ManagerDeleteUser = (props) => {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary">
+                    <Button variant="primary"
+                        onClick={handleSubmit}
+                    >
                         Save Changes
                     </Button>
                 </Modal.Footer>

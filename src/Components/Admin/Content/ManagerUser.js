@@ -79,6 +79,7 @@ const ManageUser = () => {
                             show={showModeDeleteUser}
                             setShow={setShowModeDeleteUser}
                             user={userDelete}
+                            fetListUser={fetchApi}
                         ></ManagerDeleteUser>
                     </div>
                 </div>
