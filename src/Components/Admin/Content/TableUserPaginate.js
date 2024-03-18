@@ -5,10 +5,10 @@ const TableUserPaginate = (props) => {
     const { listUser, handleClickUpdate,
         handleClickView, handleClickDelete,
         fetchListUserWithPaginate, pageCount } = props;
-    const [userAction, setUserAction] = useState('');
+    const [currentPage, setCurrentPage] = useState('');
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {
-        setUserAction(event.selected + 1);
+        setCurrentPage(event.selected + 1);
         fetchListUserWithPaginate(event.selected + 1);
     };
     return (
@@ -31,8 +31,8 @@ const TableUserPaginate = (props) => {
                             <td>{item.role}</td>
                             <td>
                                 <button className="btn btn-info mx-3" onClick={() => handleClickView(item)} >View</button>
-                                <button className="btn btn-primary mx-3" onClick={() => handleClickUpdate(item, userAction)}>Update</button>
-                                <button className="btn btn-danger mx-3" onClick={() => handleClickDelete(item, userAction)} >Delete</button>
+                                <button className="btn btn-primary mx-3" onClick={() => handleClickUpdate(item, currentPage)}>Update</button>
+                                <button className="btn btn-danger mx-3" onClick={() => handleClickDelete(item, currentPage)} >Delete</button>
                             </td>
                         </tr>
                     ))}
@@ -63,6 +63,7 @@ const TableUserPaginate = (props) => {
                     containerClassName="pagination"
                     activeClassName="active"
                     renderOnZeroPageCount={null}
+                    forcePage={props.currentPage - 1}
                 />
             </div>
         </>

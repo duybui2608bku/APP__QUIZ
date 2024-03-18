@@ -68,6 +68,7 @@ const ManagerUserCreate = (props) => {
         if (data && data.EC === 0) {
             toast.success("Create user success");
             handleClose();
+            props.setCurrentPage(1);
             await props.fetchListUserWithPaginate(1);
         }
 

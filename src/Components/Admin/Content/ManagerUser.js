@@ -19,6 +19,7 @@ const ManageUser = () => {
     const [dataView, setDataView] = useState({});
     const [pageCountDelete, setPageCountDelete] = useState(0);
     const [pageCountUpdate, setPageCountUpdate] = useState(0);
+    const [currentPage, setCurrentPage] = useState('');
     useEffect(() => {
         fetchListUserWithPaginate(1);
     }, []);
@@ -67,6 +68,7 @@ const ManageUser = () => {
                             handleClickDelete={handleClickDelete}
                             fetchListUserWithPaginate={fetchListUserWithPaginate}
                             pageCount={pageCount}
+                            currentPage={currentPage}
                         ></TableUserPaginate>
                     </div>
                     <div>
@@ -74,6 +76,7 @@ const ManageUser = () => {
                             show={showModelCreateUser}
                             setShow={setShowModelCreateUser}
                             fetchListUserWithPaginate={fetchListUserWithPaginate}
+                            setCurrentPage={setCurrentPage}
                         ></ManagerUserCreate>
                         <ModaleUpdateUser
                             show={showModeUpdateUser}
