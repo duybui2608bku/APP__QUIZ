@@ -7,7 +7,8 @@ import { toast } from 'react-toastify';
 import { putUpdateUser } from '../../../Service/ApiServeice';
 import _ from 'lodash';
 const ModaleUpdateUser = (props) => {
-    const { show, setShow, fetListUser, dataUpdate } = props;
+    console.log(props);
+    const { show, setShow, dataUpdate, pageCountUpdate } = props;
     const [email, setEmail] = useState("");
     const [password, setPasswrod] = useState("");
     const [user, setUser] = useState("");
@@ -58,7 +59,7 @@ const ModaleUpdateUser = (props) => {
         if (data && data.EC === 0) {
             toast.success("Create user success");
             handleClose();
-            await fetListUser();
+            await props.fetchListUserWithPaginate(pageCountUpdate);
         }
 
         if (data && data.EC !== 0) {

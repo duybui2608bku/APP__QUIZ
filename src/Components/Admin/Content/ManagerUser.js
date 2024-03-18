@@ -1,12 +1,14 @@
 import ManagerUserCreate from "./ManagerUserCreate";
 import "./ManagerUser.scss";
-import TableUser from "./TableUser";
+import TableUserPaginate from "./TableUserPaginate";
 import { useEffect, useState } from "react";
-import { getAllUser } from "../../../Service/ApiServeice";
+import { getUserWithPaginate } from "../../../Service/ApiServeice";
 import ModaleUpdateUser from "./ModalUpdateUser";
 import ManagerUserView from "./ManagerUserView";
 import ManagerDeleteUser from "./ModaleDeleteUser";
 const ManageUser = () => {
+    const LIMIT_USER = 5;
+    const [pageCount, setPageCount] = useState(0);
     const [listUser, setListUser] = useState([]);
     const [showModelCreateUser, setShowModelCreateUser] = useState(false);
     const [showModeUpdateUser, setShowModeUpdateUser] = useState(false);
@@ -15,18 +17,24 @@ const ManageUser = () => {
     const [userDelete, setUserDelete] = useState('');
     const [dataUpdate, setDataUpdate] = useState({});
     const [dataView, setDataView] = useState({});
+    const [pageCountDelete, setPageCountDelete] = useState(0);
+    const [pageCountUpdate, setPageCountUpdate] = useState(0);
     useEffect(() => {
-        fetchApi();
+        fetchListUserWithPaginate(1);
     }, []);
 
-    const fetchApi = async () => {
-        let res = await getAllUser();
+
+    const fetchListUserWithPaginate = async (page) => {
+        let res = await getUserWithPaginate(page, LIMIT_USER);
         if (res.EC === 0) {
-            setListUser(res.DT);
+            setListUser(res.DT.users);
+            setPageCount(res.DT.totalPages);
         }
     }
 
-    const handleClickUpdate = (user) => {
+
+    const handleClickUpdate = (user, userAction) => {
+        setPageCountUpdate(userAction);
         setShowModeUpdateUser(true);
         setDataUpdate(user);
     }
@@ -36,10 +44,10 @@ const ManageUser = () => {
         setShowModeViewUser(true);
     }
 
-    const handleClickDelete = (user) => {
+    const handleClickDelete = (user, pageCount) => {
         setUserDelete(user);
         setShowModeDeleteUser(true);
-
+        setPageCountDelete(pageCount);
     }
     return (
         <>
@@ -52,23 +60,27 @@ const ManageUser = () => {
                         <button className="btn btn-primary" onClick={() => setShowModelCreateUser(true)}>Add New User</button>
                     </div>
                     <div className="table-user-container">
-                        <TableUser listUser={listUser}
+                        <TableUserPaginate
+                            listUser={listUser}
                             handleClickUpdate={handleClickUpdate}
                             handleClickView={handleClickView}
                             handleClickDelete={handleClickDelete}
-                        ></TableUser>
+                            fetchListUserWithPaginate={fetchListUserWithPaginate}
+                            pageCount={pageCount}
+                        ></TableUserPaginate>
                     </div>
                     <div>
                         <ManagerUserCreate
                             show={showModelCreateUser}
                             setShow={setShowModelCreateUser}
-                            fetListUser={fetchApi}
+                            fetchListUserWithPaginate={fetchListUserWithPaginate}
                         ></ManagerUserCreate>
                         <ModaleUpdateUser
                             show={showModeUpdateUser}
                             setShow={setShowModeUpdateUser}
-                            fetListUser={fetchApi}
+                            fetchListUserWithPaginate={fetchListUserWithPaginate}
                             dataUpdate={dataUpdate}
+                            pageCountUpdate={pageCountUpdate}
                         ></ModaleUpdateUser>
                         <ManagerUserView
                             show={showModeViewUser}
@@ -79,7 +91,8 @@ const ManageUser = () => {
                             show={showModeDeleteUser}
                             setShow={setShowModeDeleteUser}
                             user={userDelete}
-                            fetListUser={fetchApi}
+                            fetchListUserWithPaginate={fetchListUserWithPaginate}
+                            pageCountDelete={pageCountDelete}
                         ></ManagerDeleteUser>
                     </div>
                 </div>

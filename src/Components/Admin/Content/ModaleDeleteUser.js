@@ -1,19 +1,18 @@
-import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import "./ManagerUserCreate.scss";
 import { toast } from 'react-toastify';
 import { deleteUser } from '../../../Service/ApiServeice';
 const ManagerDeleteUser = (props) => {
-    const { show, setShow, user, fetListUser } = props;
-    const [previewImage, setPreviewImage] = useState("");
+    const { show, setShow, user, fetchListUserWithPaginate } = props;
+    // const [previewImage, setPreviewImage] = useState("");
 
     const handleSubmit = async () => {
         let data = await deleteUser(user.id);
         if (data && data.EC === 0) {
             toast.success(data.EM);
             handleClose();
-            await fetListUser();
+            await fetchListUserWithPaginate(props.pageCountDelete);
         }
         if (data && data.EC !== 0) {
             toast.error(data.EM);

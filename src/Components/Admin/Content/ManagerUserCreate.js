@@ -6,7 +6,7 @@ import "./ManagerUserCreate.scss";
 import { toast } from 'react-toastify';
 import { postCreateUser } from '../../../Service/ApiServeice';
 const ManagerUserCreate = (props) => {
-    const { show, setShow, fetListUser } = props;
+    const { show, setShow } = props;
     const [email, setEmail] = useState("");
     const [password, setPasswrod] = useState("");
     const [user, setUser] = useState("");
@@ -68,7 +68,7 @@ const ManagerUserCreate = (props) => {
         if (data && data.EC === 0) {
             toast.success("Create user success");
             handleClose();
-            await fetListUser();
+            await props.fetchListUserWithPaginate(1);
         }
 
         if (data && data.EC !== 0) {
@@ -79,10 +79,6 @@ const ManagerUserCreate = (props) => {
 
     return (
         <>
-            {/* <Button variant="primary" onClick={handleShow}>
-                Launch demo modal
-            </Button> */}
-
             <Modal show={show} onHide={handleClose} size='lg' backdrop="static" className='modal-css'>
                 <Modal.Header closeButton>
                     <Modal.Title>Add New User</Modal.Title>
