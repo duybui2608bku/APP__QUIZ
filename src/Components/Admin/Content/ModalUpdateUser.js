@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import { putUpdateUser } from '../../../Service/ApiServeice';
 import _ from 'lodash';
 const ModaleUpdateUser = (props) => {
-    console.log(props);
     const { show, setShow, dataUpdate, pageCountUpdate } = props;
     const [email, setEmail] = useState("");
     const [password, setPasswrod] = useState("");

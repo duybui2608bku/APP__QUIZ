@@ -7,12 +7,22 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { postLogin } from "../../Service/ApiServeice";
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
+    const distpatch = useDispatch();
+
     const handleClickLogin = async () => {
         let res = await postLogin(email, password);
         if (res && res.EC === 0) {
+            distpatch({
+                type: 'FETCH_USER_LOGIN_SUCCESS',
+                payload: res
+            })
             toast.success(res.EM);
             navigate('/');
         }
@@ -24,11 +34,6 @@ const Login = () => {
     const handleClickRegister = (e) => {
         navigate('/register');
     }
-
-
-
-
-    const navigate = useNavigate();
 
     const handleClickGoHome = () => {
         navigate("/");
