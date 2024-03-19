@@ -1,4 +1,6 @@
 import video from "../../Asset/video.mp4";
+import { useSelector } from "react-redux";
+
 const Home = () => {
 
     return (

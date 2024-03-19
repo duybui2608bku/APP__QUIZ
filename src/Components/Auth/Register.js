@@ -4,11 +4,12 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { postRegister } from "../../Service/ApiServeice";
 import { toast } from 'react-toastify';
+import { PiSpinnerGapFill } from "react-icons/pi";
 const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassWord] = useState("");
-
+    const [isLoading, setIsLoading] = useState(false);
 
 
     const handleClickLogin = async () => {
@@ -16,12 +17,15 @@ const Register = () => {
             toast.error("Not match password");
             return;
         }
+        setIsLoading(true)
         let res = await postRegister(email, password);
         if (res && res.EC === 0) {
             toast.success(res.EM);
+            setIsLoading(false);
             navigate('/login');
         }
         if (res && res.EC !== 0) {
+            setIsLoading(false);
             toast.error(res.EM);
         }
     }
@@ -71,7 +75,11 @@ const Register = () => {
                         <button
                             className="btn-login"
                             onClick={() => handleClickLogin()}
-                        >Sign Up</button>
+                            disabled={isLoading}
+                        >
+                            {isLoading === true && <PiSpinnerGapFill className="loading-icon" />}
+                            <span>Sign Up</span>
+                        </button>
                     </div>
                     <div className="btn-goHome">
                         <button onClick={() => handleClickGoHome()}><FaArrowLeft></FaArrowLeft></button>
