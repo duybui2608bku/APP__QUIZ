@@ -10,7 +10,6 @@ const Header = () => {
     const navigate = useNavigate();
     const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
     const account = useSelector(state => state.userReducer.account);
-    console.log(isAuthenticated);
     const handleClickLogin = () => {
         navigate('/login');
     }
