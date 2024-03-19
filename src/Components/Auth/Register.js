@@ -1,28 +1,29 @@
-import { ImFacebook2 } from "react-icons/im";
-import { FaGooglePlus } from "react-icons/fa";
-import { FaGithub } from "react-icons/fa";
 import "./Login.css";
 import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
-import { postLogin } from "../../Service/ApiServeice";
+import { postRegister } from "../../Service/ApiServeice";
 import { toast } from 'react-toastify';
-const Login = () => {
+const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassWord] = useState("");
+
+
+
     const handleClickLogin = async () => {
-        let res = await postLogin(email, password);
+        if (password !== confirmPassword) {
+            toast.error("Not match password");
+            return;
+        }
+        let res = await postRegister(email, password);
         if (res && res.EC === 0) {
             toast.success(res.EM);
-            navigate('/');
+            navigate('/login');
         }
         if (res && res.EC !== 0) {
             toast.error(res.EM);
         }
-    }
-
-    const handleClickRegister = (e) => {
-        navigate('/register');
     }
 
 
@@ -38,9 +39,9 @@ const Login = () => {
         <>
             <div className="login-container">
                 <div className="login">
-                    <div className="title">Hello Again!</div>
-                    <div className="des">Wellcome back you've
-                        <br />been missed!
+                    <div className="title">Not a member!</div>
+                    <div className="des">
+                        Register Now
                     </div>
                     <div className="group">
                         <input
@@ -58,29 +59,19 @@ const Login = () => {
                             type="password"
                             placeholder="Enter password" />
                     </div>
-                    <div className="recovery">
-                        <a href="">Recovery</a>
+                    <div className="group">
+                        <input
+                            className="ConfirmPassword"
+                            onChange={(e) => setConfirmPassWord(e.target.value)}
+                            value={confirmPassword}
+                            type="password"
+                            placeholder="Confirm password" />
                     </div>
                     <div className="sign">
                         <button
                             className="btn-login"
                             onClick={() => handleClickLogin()}
-                        >Sign In</button>
-                    </div>
-                    <div className="or">Or continue with</div>
-                    <div className="list">
-                        <div className="item">
-                            <FaGooglePlus />
-                        </div>
-                        <div className="item">
-                            <ImFacebook2 />
-                        </div>
-                        <div className="item">
-                            <FaGithub />
-                        </div>
-                    </div>
-                    <div className="register">
-                        Not a member? <a href="" onClick={(e) => handleClickRegister()}>Register</a>
+                        >Sign Up</button>
                     </div>
                     <div className="btn-goHome">
                         <button onClick={() => handleClickGoHome()}><FaArrowLeft></FaArrowLeft></button>
@@ -92,4 +83,4 @@ const Login = () => {
     )
 };
 
-export default Login;
+export default Register;
