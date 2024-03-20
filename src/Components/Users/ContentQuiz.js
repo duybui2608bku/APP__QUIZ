@@ -8,8 +8,9 @@ const ContenQuiz = (props) => {
         );
     }
 
-    const handleCheckBock = (e) => {
-        console.log(e.target.checked)
+    const handleCheckBock = (e, quizId, answerId) => {
+        console.log(e.target.checked);
+        props.handleCheckBock(quizId, answerId)
     }
     console.log(dataQuiz);
     return (
@@ -20,7 +21,7 @@ const ContenQuiz = (props) => {
                     {dataQuiz.imageFile ? (
                         <img src={`data:image/jpeg;base64,${dataQuiz.imageFile}`} />
                     ) : (
-                        <div>No Image</div>
+                        <div>   </div>
                     )}
                 </div>
                 <div className="answer-quiz">
@@ -29,7 +30,7 @@ const ContenQuiz = (props) => {
                             return (
                                 <div key={`answer-${index}`}>
                                     <div className="form-check">
-                                        <input className="form-check-input" type="checkbox" onChange={(e) => handleCheckBock(e)} />
+                                        <input checked={item.isSelected} className="form-check-input" type="checkbox" onChange={(e) => handleCheckBock(e, dataQuiz.id, item.id)} />
                                         <label className="form-check-label">{item.description}</label>
                                     </div>
                                 </div>
