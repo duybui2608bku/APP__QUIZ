@@ -9,7 +9,6 @@ const ContenQuiz = (props) => {
     }
 
     const handleCheckBock = (e, quizId, answerId) => {
-        console.log(e.target.checked);
         props.handleCheckBock(quizId, answerId)
     }
     console.log(dataQuiz);

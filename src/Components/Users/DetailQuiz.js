@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import { getQuizById } from "../../Service/ApiServeice";
+import { getQuizById, postSubmitQuiz } from "../../Service/ApiServeice";
 import './DetailQuiz.scss';
 import { FaChevronCircleLeft } from "react-icons/fa";
 import { FaChevronCircleRight } from "react-icons/fa";
@@ -8,6 +8,7 @@ import ContenQuiz from "./ContentQuiz";
 import _ from "lodash";
 const DetaiQuiz = () => {
     const params = useParams();
+    const quizId = params.id;
     const location = useLocation();
     const [dataQuiz, setDataQuiz] = useState([]);
     const [index, setIndex] = useState(0);
@@ -48,11 +49,41 @@ const DetaiQuiz = () => {
 
     }
 
-    console.log(dataQuiz);
+    const handleSubmit = async () => {
+        let payload = {
+            quizId: +quizId,
+            answers: []
+        };
+        let answers = [];
+        if (dataQuiz && dataQuiz.length > 0) {
+            dataQuiz.forEach(question => {
+                let questionId = question.id;
+                let userAnswersId = [];
+                if (question.answers && Array.isArray(question.answers)) {
+                    question.answers.forEach(answer => {
+                        if (answer.isSelected === true) {
+                            userAnswersId.push(answer.id);
+                        }
+                    });
+                }
+                answers.push({
+                    questionId: questionId,
+                    userAnswerId: userAnswersId
+                });
+            });
+
+            payload.answers = answers;
+            let res = await postSubmitQuiz(payload);
+            console.log(res);
+        }
+    };
+
+
+
 
     useEffect(() => {
         fetchQuiz();
-    }, [params.id])
+    }, [quizId])
 
     const fetchQuiz = async () => {
         let data = await getQuizById(params.id);
@@ -78,7 +109,7 @@ const DetaiQuiz = () => {
                     ></ContenQuiz>
                     <div className="footer-quiz">
                         <div className="icon"><FaChevronCircleLeft onClick={handleClickPreQuestion} /></div>
-                        <button className="btn btn-primary">Submit</button>
+                        <button className="btn btn-primary" onClick={() => handleSubmit()}>Submit</button>
                         <div className="icon"><FaChevronCircleRight onClick={handleClickNextQuestion} /></div>
                     </div>
                 </div>
