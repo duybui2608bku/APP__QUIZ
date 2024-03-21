@@ -3,6 +3,7 @@ import SideBar from "./Sidebar";
 import "./Admin.scss";
 import { FaBarsProgress } from "react-icons/fa6";
 import { Outlet } from "react-router-dom";
+import PerfectScrollbar from 'react-perfect-scrollbar';
 const Admin = () => {
     const [state, setState] = useState(true);
 
@@ -19,7 +20,11 @@ const Admin = () => {
                     <div className="admin-header">
                         <FaBarsProgress onClick={handleClick} size={24}></FaBarsProgress>
                     </div>
-                    <div className="admin-main"><Outlet></Outlet></div>
+                    <div className="admin-main">
+                        <PerfectScrollbar>
+                            <Outlet></Outlet>
+                        </PerfectScrollbar>
+                    </div>
                 </div>
             </div>
         </>

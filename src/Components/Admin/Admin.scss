@@ -5,12 +5,12 @@
     }
     .admin-content {
         width: 100%;
+        overflow: hidden;
         .admin-header{
-            height: 40px;
-            // border: 1px solid red;
+            height: 40px;          
         }
         .admin-main {
-            // border: 1px solid green;
+            height: calc(100vh - 40px);
         }
     }
 

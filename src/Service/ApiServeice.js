@@ -50,11 +50,31 @@ const postSubmitQuiz = (data) => {
     return axios.post(`api/v1/quiz-submit`, { ...data });
 }
 
+const postQuiz = (description, name, difficulty, quizImage) => {
+    const data = new FormData();
+    data.append('description', description);
+    data.append('name', name);
+    data.append('difficulty', difficulty);
+    data.append('quizImage', quizImage);
+    return axios.post(`api/v1/quiz`, data);
+}
+
+const getAllQuiz = () => {
+    return axios.get(`api/v1/quiz/all`);
+}
+
+const deleteQuiz = (id) => {
+    return axios.delete(`api/v1/quiz/${id}`);
+}
+
+
+
 export {
     postCreateUser, getAllUser,
     putUpdateUser, deleteUser,
     getUserWithPaginate,
     postLogin, postRegister,
     getQuizByUser, getQuizById,
-    postSubmitQuiz,
+    postSubmitQuiz, postQuiz,
+    getAllQuiz, deleteQuiz
 };
