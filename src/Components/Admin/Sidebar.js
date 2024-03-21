@@ -13,13 +13,14 @@ const SideBar = (props) => {
     return (
         <Sidebar collapsed={state} image={img1} width='300px' collapsedWidth='80px'>
             <Menu>
-                <MenuItem className='text-center'>
+                <MenuItem className='text-center'
+                    component={<NavLink to="/"></NavLink>}>
                     <img src={logo} alt="Logo" className="logo-image" />
                     DUY BKU </MenuItem>
                 <MenuItem icon={<FcCurrencyExchange size={24} />} >  Dashboard </MenuItem>
                 <SubMenu label="Tính Năng" icon={<MdFeaturedPlayList size={24} />} >
                     <MenuItem component={<NavLink to="manager-user"></NavLink>} icon={<FcConferenceCall size={24} />}>Quản Lí User</MenuItem>
-                    <MenuItem icon={<FcBusiness size={24} />}> Quản Lí Bài Quiz </MenuItem>
+                    <MenuItem component={<NavLink to="manager-quiz"></NavLink>} icon={<FcBusiness size={24} />}> Quản Lí Bài Quiz </MenuItem>
                     <MenuItem icon={<FcQuestions size={24} />}> Quản Lí Câu Hỏi </MenuItem>
                 </SubMenu>
 
