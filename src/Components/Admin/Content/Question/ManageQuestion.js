@@ -40,9 +40,8 @@ const ManageQuestion = () => {
             ]
         }
     ];
-
-    const [selectedQuiz, setSelectedQuiz] = useState('');
     const [listQuiz, setListQuiz] = useState([]);
+    const [selectedQuiz, setSelectedQuiz] = useState("");
     const [question, setQuestion] = useState(INIT);
 
     useEffect(() => {
@@ -55,6 +54,8 @@ const ManageQuestion = () => {
             setListQuiz(res.DT)
         }
     }
+
+    console.log(selectedQuiz);
 
     const handleAddRemoveQuestion = (type, id) => {
         console.log(type)

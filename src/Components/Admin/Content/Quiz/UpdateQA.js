@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import _, { forEach } from "lodash";
 import { toast } from "react-toastify";
-import { getAllQuiz, postAnswerForQuestion, postQuestionForQuiz } from "../../../../Service/ApiServeice";
+import { getAllQuiz, getQuizWithQA, postAnswerForQuestion, postQuestionForQuiz } from "../../../../Service/ApiServeice";
 const UpdateQA = () => {
 
     const INIT = [
@@ -44,19 +44,38 @@ const UpdateQA = () => {
     const [selectedQuiz, setSelectedQuiz] = useState('');
     const [listQuiz, setListQuiz] = useState([]);
     const [question, setQuestion] = useState(INIT);
+    const [listQA, setlistQA] = useState([]);
+    const [prevSelectedQuiz, setPrevSelectedQuiz] = useState('');
+
     useEffect(() => {
         fetchQuiz();
     }, [])
 
+    useEffect(() => {
+        if (prevSelectedQuiz !== selectedQuiz) {
+            fetchQuestion();
+            setPrevSelectedQuiz(selectedQuiz);
+        }
+    }, [selectedQuiz]);
+
     const fetchQuiz = async () => {
         let res = await getAllQuiz();
         if (res && res.EC === 0) {
-            setListQuiz(res.DT)
+            setListQuiz(res.DT);
+            setSelectedQuiz(res.DT[0].id);
+            setPrevSelectedQuiz(res.DT[0].id);
         }
     }
 
+    const fetchQuestion = async () => {
+        let res = await getQuizWithQA(selectedQuiz);
+        if (res && res.EC === 0) {
+            setlistQA(res.DT)
+        }
+    }
+
+
     const handleAddRemoveQuestion = (type, id) => {
-        console.log(type)
         if (type === 'ADD') {
             const newQuestion = {
                 id: uuidv4(),
@@ -71,46 +90,53 @@ const UpdateQA = () => {
                     }
                 ]
             };
-            setQuestion([...question, newQuestion]);
-            toast.success("Add quiz success!")
+
+            let listQAClone = _.cloneDeep(listQA);
+            listQAClone.qa.push(newQuestion);
+            setlistQA(listQAClone);
+            toast.success("Add quiz success!");
         }
+
         if (type === 'REMOVE') {
-            let questionClone = _.cloneDeep(question);
-            questionClone = questionClone.filter(item => item.id !== id);
-            setQuestion(questionClone);
-            toast.success("Delete quiz success!")
+            let listQAClone = _.cloneDeep(listQA);
+            listQAClone.qa = listQAClone.qa.filter(question => question.id !== id);
+            setlistQA(listQAClone);
+            toast.success("Delete quiz success!");
         }
     }
 
+
     const handleAddRemoveAnswer = (type, questionId, answerId) => {
-        let questionClone = _.cloneDeep(question);
+        let listQAClone = _.cloneDeep(listQA);
         if (type === 'ADD') {
             const newAnswer = {
                 id: uuidv4(),
                 description: '',
                 isCorrect: false
             };
-            let index = questionClone.findIndex(item => item.id === questionId);
-            questionClone[index].answers.push(newAnswer);
-            setQuestion(questionClone);
+            let index = listQAClone.qa.findIndex(item => item.id === questionId);
+            listQAClone.qa[index].answers.push(newAnswer);
+            setlistQA(listQAClone);
             toast.success("Add answer success!")
         }
         if (type === 'REMOVE') {
-            let questionClone = _.cloneDeep(question);
-            let index = questionClone.findIndex(item => item.id === questionId);
-            questionClone[index].answers = questionClone[index].answers.filter(item => item.id !== answerId);
-            setQuestion(questionClone);
+            let listQAClone = _.cloneDeep(listQA);
+            let index = listQAClone.qa.findIndex(item => item.id === questionId);
+            listQAClone.qa[index].answers = listQAClone.qa[index].answers.filter(item => item.id !== answerId);
+            setlistQA(listQAClone);
             toast.success("Delete answer success!")
         }
     }
 
     const handleOnChange = (type, questionId, value) => {
         if (type === 'QUESTION') {
-            let questionClone = _.cloneDeep(question);
-            let index = questionClone.findIndex(item => item.id === questionId);
-            if (index > -1) {
-                questionClone[index].description = value;
-                setQuestion(questionClone);
+            let listQAClone = _.cloneDeep(listQA);
+            console.log(listQAClone);
+
+            const questionIndex = listQAClone.qa.findIndex(item => item.id === questionId);
+            if (questionIndex > -1) {
+                listQAClone.qa[questionIndex].description = value;
+                setlistQA(listQAClone);
             }
         }
     }
@@ -126,23 +152,25 @@ const UpdateQA = () => {
     }
 
     const handleAnswerQuestion = (type, questionId, answerId, value) => {
-        let questionClone = _.cloneDeep(question);
-        let index = questionClone.findIndex(item => item.id === questionId);
+        let listQAClone = _.cloneDeep(listQA);
+        let index = listQAClone.qa.findIndex(item => item.id === questionId);
+
         if (index > -1) {
-            questionClone[index].answers = questionClone[index].answers.map(answers => {
-                if (answers.id === answerId) {
+            listQAClone.qa[index].answers = listQAClone.qa[index].answers.map(answer => {
+                if (answer.id === answerId) {
                     if (type === "CHECKBOX") {
-                        answers.isCorrect = !answers.isCorrect;
+                        answer.isCorrect = !answer.isCorrect;
                     }
                     if (type === "ANSWER") {
-                        answers.description = value;
+                        answer.description = value;
                     }
                 }
-                return answers;
+                return answer;
             });
-            setQuestion(questionClone);
+            setlistQA(listQAClone);
         }
     }
+
 
     const handleSubmit = async () => {
         if (_.isEmpty(selectedQuiz)) {
@@ -194,9 +222,6 @@ const UpdateQA = () => {
         toast.success("Save Quiz Success");
         setQuestion(INIT);
     }
-
-
-    console.log(question);
     return (
         <>
             <div className="manager-question-container">
@@ -210,87 +235,94 @@ const UpdateQA = () => {
                             }
                         </select>
                     </div>
-                    {question && question.length > 0
-                        && question.map((item, index) => {
+                    {listQA && Object.keys(listQA).length > 0
+                        && Object.keys(listQA.qa).map((key, index) => {
+                            const item = listQA.qa[key];
                             return (
-                                <>
-                                    <div key={item.id} className="add-question-container">
-                                        <div className=" col-md-12 row">
-                                            <div className="col-md-6">
-                                                <div class="form-floating mb-3">
-                                                    <input value={item.description}
-                                                        type="text" className={`form-control ${item.isValidate}`}
-                                                        id="floatingInput"
-                                                        placeholder="Description"
-                                                        onChange={(e) => handleOnChange('QUESTION', item.id, e.target.value)}
-                                                    />
-                                                    <label for="floatingInput">Question {index + 1} description.</label>
-                                                </div>
+                                <div key={item.id} className="add-question-container">
+                                    <div className=" col-md-12 row">
+                                        <div className="col-md-6">
+                                            <div className="form-floating mb-3">
+                                                <input
+                                                    value={item.description}
+                                                    type="text"
+                                                    className={`form-control ${item.isValidate}`}
+                                                    id="floatingInput"
+                                                    placeholder="Description"
+                                                    onChange={(e) => handleOnChange('QUESTION', item.id, e.target.value)}
+                                                />
+                                                <label htmlFor="floatingInput">Answers {index + 1}: description.</label>
                                             </div>
-                                            <div className="col-md-6 add-quiz">
+                                        </div>
+                                        <div className="col-md-6 add-quiz">
+                                            <div className="icon-add-quiz">
+                                                <FaPlusCircle onClick={() => handleAddRemoveQuestion("ADD")} />
+                                            </div>
+                                            {question.length > 1 &&
                                                 <div className="icon-add-quiz">
-                                                    <FaPlusCircle onClick={() => handleAddRemoveQuestion("ADD")} />
+                                                    <FaCircleMinus onClick={() => handleAddRemoveQuestion("REMOVE", item.id)} />
                                                 </div>
-                                                {question.length > 1 &&
-                                                    <div className="icon-add-quiz">
-                                                        <FaCircleMinus onClick={() => handleAddRemoveQuestion("REMOVE", item.id)} />
-                                                    </div>
-                                                }
-                                                <div className="upload-image">
-                                                    <input id={`${item.id}`}
-                                                        type="file"
-                                                        onChange={(e) => handleChangeFile(item.id, e)}
-                                                        hidden></input>
-                                                    <label htmlFor={`${item.id}`} className="upload" ><RiImageAddFill />Upload Image</label>
-                                                    <div className="status-image">
-                                                        {item.image ? item.imageName : <><FaImages /> No image uploaded!</>}
-                                                    </div>
-
+                                            }
+                                            <div className="upload-image">
+                                                <input
+                                                    id={`${item.id}`}
+                                                    type="file"
+                                                    onChange={(e) => handleChangeFile(item.id, e)}
+                                                    hidden
+                                                ></input>
+                                                <label htmlFor={`${item.id}`} className="upload" >
+                                                    <RiImageAddFill />Upload Image
+                                                </label>
+                                                <div className="status-image">
+                                                    {item.image ? item.imageName : <><FaImages /> No image uploaded!</>}
                                                 </div>
                                             </div>
                                         </div>
-                                        {item.answers && item.answers.length > 0 &&
-                                            item.answers.map((answer, index) => {
-                                                return (
-                                                    <>
-                                                        <div className="col-md-12 row add-question">
-                                                            <div class="form-check col-md-1 checkbox-question">
-                                                                <input class="form-check-input"
-                                                                    type="checkbox"
-                                                                    value=""
-                                                                    checked={answer.isSelected}
-                                                                    onChange={(e) => handleAnswerQuestion("CHECKBOX", item.id, answer.id, e.target.checked)}
-                                                                    id="flexCheckDefault" />
-                                                            </div>
-                                                            <div class="form-floating mb-3 col-md-4 description-question">
-                                                                <input value={answer.description}
-                                                                    type="text" className={`form-control ${answer.isValidate}`}
-                                                                    id="floatingInput"
-                                                                    placeholder="name@example.com"
-                                                                    onChange={(e) => handleAnswerQuestion("ANSWER", item.id, answer.id, e.target.value)}
-                                                                />
-                                                                <label for="floatingInput">{answer.description}</label>
-                                                            </div>
-                                                            <div className="col-md-7 icon-add-remove">
-                                                                <div className="icon-add-quiz  icon-add-answer">
-                                                                    <FaPlusCircle onClick={() => handleAddRemoveAnswer("ADD", item.id)} />
-                                                                </div>
-                                                                {item.answers.length > 1 &&
-                                                                    <div className="icon-add-quiz col-md-7 icon-add-answer">
-                                                                        <FaCircleMinus onClick={() => handleAddRemoveAnswer("REMOVE", item.id, answer.id)} />
-                                                                    </div>
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    </>
-                                                )
-                                            })
-                                        }
                                     </div>
-                                </>
+                                    {item.answers && item.answers.length > 0 &&
+                                        item.answers.map((answer, ansIndex) => {
+                                            return (
+                                                <div key={answer.id} className="col-md-12 row add-question">
+                                                    <div className="form-check col-md-1 checkbox-question">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="checkbox"
+                                                            value=""
+                                                            checked={answer.isSelected}
+                                                            onChange={(e) => handleAnswerQuestion("CHECKBOX", item.id, answer.id, e.target.checked)}
+                                                            id="flexCheckDefault"
+                                                        />
+                                                    </div>
+                                                    <div className="form-floating mb-3 col-md-4 description-question">
+                                                        <input
+                                                            value={answer.description}
+                                                            type="text"
+                                                            className={`form-control ${answer.isValidate}`}
+                                                            id="floatingInput"
+                                                            placeholder="name@example.com"
+                                                            onChange={(e) => handleAnswerQuestion("ANSWER", item.id, answer.id, e.target.value)}
+                                                        />
+                                                        <label htmlFor="floatingInput">{answer.description}</label>
+                                                    </div>
+                                                    <div className="col-md-7 icon-add-remove">
+                                                        <div className="icon-add-quiz  icon-add-answer">
+                                                            <FaPlusCircle onClick={() => handleAddRemoveAnswer("ADD", item.id)} />
+                                                        </div>
+                                                        {item.answers.length > 1 &&
+                                                            <div className="icon-add-quiz col-md-7 icon-add-answer">
+                                                                <FaCircleMinus onClick={() => handleAddRemoveAnswer("REMOVE", item.id, answer.id)} />
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
                             )
                         })
                     }
+
                 </div>
                 {question && question.length > 0 &&
                     <div className="mt-3 d-flex justify-content-center ">

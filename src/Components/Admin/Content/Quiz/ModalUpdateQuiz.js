@@ -14,7 +14,7 @@ const ModaleUpdateQuiz = (props) => {
     const [quizImage, setQuizImage] = useState('');
     const [previewImage, setPreviewImage] = useState("");
 
-    console.log(difficulty);
+
     useEffect(() => {
         if (dataUpdateQuiz) {
             setDescription(dataUpdateQuiz.description || '');
@@ -27,7 +27,6 @@ const ModaleUpdateQuiz = (props) => {
         }
     }, [dataUpdateQuiz]);
 
-    console.log(name);
     const handleUploadImage = (e) => {
         if (e.target && e.target.files && e.target.files[0]) {
             setPreviewImage(URL.createObjectURL(e.target.files[0]));

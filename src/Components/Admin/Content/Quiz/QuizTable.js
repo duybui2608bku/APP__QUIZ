@@ -5,7 +5,6 @@ const QuizTable = (props) => {
     const { handleClickDelete, handleClickUpdateQuiz, dataAfterDelete, dataAfterCreate, dataAfterUpdate } = props;
     const [dataQuizById, setDataQuizById] = useState([]);
 
-    console.log(dataAfterCreate);
 
     useEffect(() => {
         fetchQuiz();

@@ -1,23 +1,27 @@
 import { useEffect, useState } from "react";
-import { getAllQuiz, getAllUser } from "../../../../Service/ApiServeice";
+import { getAllQuiz, getAllUser, postAssignQuizToUser } from "../../../../Service/ApiServeice";
+import { toast } from "react-toastify";
 
 const AssignQuiz = (props) => {
 
-    const [selectedQuiz, setSelectedQuiz] = useState('');
-    const [listQuiz, setListQuiz] = useState([]);
+
 
     const [selectedUser, setSelectedUser] = useState('');
     const [listUser, setListUser] = useState([]);
+    const [listQuiz, setListQuiz] = useState([]);
+
 
     useEffect(() => {
         fetchQuiz();
         fetchUser();
     }, [])
-
+    const [selectedQuiz, setSelectedQuiz] = useState(listQuiz.length > 0 ? listQuiz[0].id : '');
     const fetchQuiz = async () => {
         let res = await getAllQuiz();
         if (res && res.EC === 0) {
             setListQuiz(res.DT);
+        } else {
+            toast.error(res.EM)
         }
     };
 
@@ -25,7 +29,30 @@ const AssignQuiz = (props) => {
         let res = await getAllUser();
         if (res && res.EC === 0) {
             setListUser(res.DT);
+        } else {
+            toast.error(res.EM)
         }
+    }
+
+    const handleAssign = async () => {
+
+        if (selectedQuiz === '') {
+            toast.error("Please chosse quiz to assign!")
+            return;
+        }
+
+        if (selectedUser === '') {
+            toast.error("Please chosse user to assign!")
+            return;
+        }
+
+        const res = await postAssignQuizToUser(selectedQuiz, selectedUser);
+        if (res && res.EC === 0) {
+            toast.success(res.EM)
+        } else {
+            toast.error(res.EM)
+        }
+        console.log(res);
     }
 
     return (
@@ -58,7 +85,7 @@ const AssignQuiz = (props) => {
                     </select>
                 </div>
                 <div className="d-grid gap-2 col-6 mx-auto">
-                    <button className="btn btn-warning btn-lg">Assign</button>
+                    <button className="btn btn-warning btn-lg" onClick={handleAssign}>Assign</button>
                 </div>
             </div>
         </>
