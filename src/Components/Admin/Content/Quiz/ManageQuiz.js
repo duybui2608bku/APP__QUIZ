@@ -6,6 +6,8 @@ import QuizTable from "./QuizTable";
 import Accordion from 'react-bootstrap/Accordion';
 import ModalDeleteQuiz from "./ModalDeleteQuiz";
 import ModaleUpdateQuiz from "./ModalUpdateQuiz";
+import UpdateQA from "./UpdateQA";
+import AssignQuiz from "./AssignQuiz";
 const ManageQuiz = (props) => {
 
     const [name, setName] = useState('');
@@ -122,19 +124,31 @@ const ManageQuiz = (props) => {
                                 </fieldset>
                             </form>
                         </div>
+                        <div className="list-quiz">
+                            <div className="mb-3 ">List Quiz</div>
+                            <QuizTable
+                                handleClickDelete={handleClickDelete}
+                                handleClickUpdateQuiz={handleClickUpdateQuiz}
+                                dataAfterDelete={dataAfterDelete}
+                                dataAfterCreate={dataAfterCreate}
+                                dataAfterUpdate={dataAfterUpdate}
+                            ></QuizTable>
+                        </div>
+                    </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="1">
+                    <Accordion.Header>Update Q/A Quiz</Accordion.Header>
+                    <Accordion.Body>
+                        <UpdateQA />
+                    </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="2">
+                    <Accordion.Header>Assign to user</Accordion.Header>
+                    <Accordion.Body>
+                        <AssignQuiz />
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
-            <div className="list-quiz">
-                <div className="mb-3 ">List Quiz</div>
-                <QuizTable
-                    handleClickDelete={handleClickDelete}
-                    handleClickUpdateQuiz={handleClickUpdateQuiz}
-                    dataAfterDelete={dataAfterDelete}
-                    dataAfterCreate={dataAfterCreate}
-                    dataAfterUpdate={dataAfterUpdate}
-                ></QuizTable>
-            </div>
             <ModalDeleteQuiz
                 show={showModalDelete}
                 setShow={setShowModalDelete}

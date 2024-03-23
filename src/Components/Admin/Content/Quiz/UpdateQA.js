@@ -2,13 +2,13 @@ import { FaPlusCircle } from "react-icons/fa";
 import { FaCircleMinus } from "react-icons/fa6";
 import { FaImages } from "react-icons/fa";
 import { RiImageAddFill } from "react-icons/ri";
-import "./ManageQuestion.scss";
+import './UpdateQA.scss';
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import _, { forEach } from "lodash";
 import { toast } from "react-toastify";
 import { getAllQuiz, postAnswerForQuestion, postQuestionForQuiz } from "../../../../Service/ApiServeice";
-const ManageQuestion = () => {
+const UpdateQA = () => {
 
     const INIT = [
         {
@@ -44,7 +44,6 @@ const ManageQuestion = () => {
     const [selectedQuiz, setSelectedQuiz] = useState('');
     const [listQuiz, setListQuiz] = useState([]);
     const [question, setQuestion] = useState(INIT);
-
     useEffect(() => {
         fetchQuiz();
     }, [])
@@ -303,4 +302,4 @@ const ManageQuestion = () => {
     )
 };
 
-export default ManageQuestion;
+export default UpdateQA;
