@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import QuizTable from "./QuizTable";
 import Accordion from 'react-bootstrap/Accordion';
 import ModalDeleteQuiz from "./ModalDeleteQuiz";
+import ModaleUpdateQuiz from "./ModalUpdateQuiz";
 const ManageQuiz = (props) => {
 
     const [name, setName] = useState('');
@@ -14,6 +15,10 @@ const ManageQuiz = (props) => {
     const [showModalDelete, setShowModalDelete] = useState(false);
     const [idDelete, setIdDelete] = useState('');
     const [dataAfterDelete, setDataAfterDelete] = useState(false);
+    const [dataAfterCreate, setDataAfterCreate] = useState(false);
+    const [showModalUpdate, setShowModalUpdate] = useState(false);
+    const [dataUpdateQuiz, setDataUpdateQuiz] = useState({});
+    const [dataAfterUpdate, setDataAfterUpdate] = useState(false);
     const onChangName = (e) => {
         setName(e.target.value);
     }
@@ -46,6 +51,7 @@ const ManageQuiz = (props) => {
             setDes("");
             setName('');
             setImage(null);
+            setDataAfterCreate(!dataAfterCreate)
         } else {
             toast.error(res.EM)
         }
@@ -54,6 +60,12 @@ const ManageQuiz = (props) => {
     const handleClickDelete = (id) => {
         setShowModalDelete(true);
         setIdDelete(id);
+    }
+
+    const handleClickUpdateQuiz = (dataUpdate) => {
+        setShowModalUpdate(true);
+        setDataUpdateQuiz(dataUpdate);
+
     }
 
 
@@ -117,7 +129,10 @@ const ManageQuiz = (props) => {
                 <div className="mb-3 ">List Quiz</div>
                 <QuizTable
                     handleClickDelete={handleClickDelete}
+                    handleClickUpdateQuiz={handleClickUpdateQuiz}
                     dataAfterDelete={dataAfterDelete}
+                    dataAfterCreate={dataAfterCreate}
+                    dataAfterUpdate={dataAfterUpdate}
                 ></QuizTable>
             </div>
             <ModalDeleteQuiz
@@ -127,6 +142,14 @@ const ManageQuiz = (props) => {
                 dataAfterDelete={dataAfterDelete}
                 setDataAfterDelete={setDataAfterDelete}
             ></ModalDeleteQuiz>
+            <ModaleUpdateQuiz
+                show={showModalUpdate}
+                setShow={setShowModalUpdate}
+                dataUpdateQuiz={dataUpdateQuiz}
+                dataAfterUpdate={dataAfterUpdate}
+                setDataAfterUpdate={setDataAfterUpdate}
+            >
+            </ModaleUpdateQuiz>
         </div>
     );
 };

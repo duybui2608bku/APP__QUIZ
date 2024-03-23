@@ -16,17 +16,16 @@ const ModaleUpdateUser = (props) => {
     const [previewImage, setPreviewImage] = useState("");
 
     useEffect(() => {
-        if (_.isEmpty(dataUpdate)) {
-            setEmail(dataUpdate.email);
-            setUser(dataUpdate.username);
-            setRole(dataUpdate.role);
-            setImage(dataUpdate.image);
+        if (dataUpdate) {
+            setEmail(dataUpdate.email || '');
+            setUser(dataUpdate.username || '');
+            setRole(dataUpdate.role || 'USER');
             if (dataUpdate.image) {
                 setPreviewImage(`data:image/jpeg;base64,${dataUpdate.image}`);
-
             }
         }
-    }, [dataUpdate])
+    }, [dataUpdate]);
+
 
     const handleUploadImage = (e) => {
         if (e.target && e.target.files && e.target.files[0]) {
@@ -69,10 +68,6 @@ const ModaleUpdateUser = (props) => {
 
     return (
         <>
-            {/* <Button variant="primary" onClick={handleShow}>
-                Launch demo modal
-            </Button> */}
-
             <Modal show={show} onHide={handleClose} size='lg' backdrop="static" className='modal-css'>
                 <Modal.Header closeButton>
                     <Modal.Title>Update User</Modal.Title>
@@ -104,6 +99,7 @@ const ModaleUpdateUser = (props) => {
                                 className="form-control"
                                 id='lableUpload'
                                 hidden
+                                value={image}
                                 onChange={(e) => handleUploadImage(e)} />
                         </div>
                         <div className="col-md-12 img-preview">

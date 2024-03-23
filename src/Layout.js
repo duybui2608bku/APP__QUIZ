@@ -12,6 +12,7 @@ import Register from "./Components/Auth/Register";
 import DetaiQuiz from "./Components/Users/DetailQuiz";
 import Notfound from "./404/404";
 import ManageQuiz from "./Components/Admin/Content/Quiz/ManageQuiz";
+import ManageQuestion from "./Components/Admin/Content/Question/ManageQuestion";
 const Layout = (props) => {
 
     return (
@@ -26,6 +27,7 @@ const Layout = (props) => {
                     <Route index element={<Dashboard />} />
                     <Route path='manager-user' element={<ManageUser />} />
                     <Route path='manager-quiz' element={<ManageQuiz />} />
+                    <Route path='manager-question' element={<ManageQuestion />} />
                 </Route>
                 <Route path='/login' element={<Login />}></Route>
                 <Route path="/register" element={<Register />}></Route>

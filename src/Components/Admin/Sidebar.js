@@ -21,7 +21,7 @@ const SideBar = (props) => {
                 <SubMenu label="Tính Năng" icon={<MdFeaturedPlayList size={24} />} >
                     <MenuItem component={<NavLink to="manager-user"></NavLink>} icon={<FcConferenceCall size={24} />}>Quản Lí User</MenuItem>
                     <MenuItem component={<NavLink to="manager-quiz"></NavLink>} icon={<FcBusiness size={24} />}> Quản Lí Bài Quiz </MenuItem>
-                    <MenuItem icon={<FcQuestions size={24} />}> Quản Lí Câu Hỏi </MenuItem>
+                    <MenuItem component={<NavLink to="manager-question"></NavLink>} icon={<FcQuestions size={24} />}> Quản Lí Câu Hỏi </MenuItem>
                 </SubMenu>
 
             </Menu>

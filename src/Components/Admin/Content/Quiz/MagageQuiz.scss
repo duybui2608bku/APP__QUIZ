@@ -1,13 +1,24 @@
 .manage-quiz-container{
-    .manage-quiz-title{
-        font-weight: 600;
-        font-size: 35px;
+
+    .accordion{
+
+        .accordion-button{
+            background-color: #FCE35E66;
+        }
+
+        .accordion-body{
+            background-color: #FCE35E52;
+        }
     }
+
     .manage-quiz-add{
         padding: 20px;
     }
 
     .list-quiz{
         padding: 20px;
+        table th, table td {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
     }
 }

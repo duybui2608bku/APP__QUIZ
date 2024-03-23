@@ -4,12 +4,22 @@ import Modal from 'react-bootstrap/Modal';
 import { FcPlus } from "react-icons/fc";
 import "./ManagerUserCreate.scss";
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 const ManagerUserView = (props) => {
     const { show, setShow, dataView } = props;
     const [previewImage, setPreviewImage] = useState("");
+
     const handleClose = () => {
         setShow(false);
     };
+
+    useEffect(() => {
+        if (dataView) {
+            if (dataView.image) {
+                setPreviewImage(`data:image/jpeg;base64,${dataView.image}`);
+            }
+        }
+    }, [dataView]);
 
     return (
         <>
@@ -48,7 +58,6 @@ const ManagerUserView = (props) => {
                         </div>
                         <div className="col-md-12 img-preview">
                             {previewImage ? (<img src={previewImage} alt='img'></img>) : (<span>Preview Image</span>)}
-                            {/* <span>PREVIEW</span> */}
                         </div>
                     </form>
                 </Modal.Body>
@@ -56,9 +65,6 @@ const ManagerUserView = (props) => {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    {/* <Button variant="primary" onClick={handleSubmit}>
-                        Save
-                    </Button> */}
                 </Modal.Footer>
             </Modal>
         </>
