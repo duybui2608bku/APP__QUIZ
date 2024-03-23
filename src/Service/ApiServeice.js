@@ -39,7 +39,7 @@ const postRegister = (userEmail, userPassword) => {
 }
 
 const getQuizByUser = () => {
-    return axios.get('api/v1/quiz-by-participant');
+    return axios.get('api/v1/quiz/all');
 }
 
 const getQuizById = (idQuiz) => {
@@ -77,6 +77,20 @@ const putUpdateQuiz = (id, description, name, difficulty, quizImage) => {
     return axios.put('api/v1/quiz', data);
 }
 
+const postQuestionForQuiz = (id, description, questionImage) => {
+    const data = new FormData();
+    data.append('quiz_id', id);
+    data.append('description', description);
+    data.append('questionImage', questionImage);
+    return axios.post('api/v1/question', data);
+}
+
+const postAnswerForQuestion = (description, correctAnswer, question_id) => {
+    return axios.post('api/v1/answer', {
+        description, correctAnswer, question_id
+    });
+}
+
 export {
     postCreateUser, getAllUser,
     putUpdateUser, deleteUser,
@@ -85,5 +99,6 @@ export {
     getQuizByUser, getQuizById,
     postSubmitQuiz, postQuiz,
     getAllQuiz, deleteQuiz,
-    putUpdateQuiz
+    putUpdateQuiz, postQuestionForQuiz,
+    postAnswerForQuestion
 };
