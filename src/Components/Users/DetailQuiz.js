@@ -8,6 +8,7 @@ import ContenQuiz from "./ContentQuiz";
 import _ from "lodash";
 import ModalSubmitQuiz from "./ModelSubitQuiz";
 import { toast } from 'react-toastify';
+import RightContent from "./Content/RightContent";
 const DetaiQuiz = () => {
     const params = useParams();
     const quizId = params.id;
@@ -16,6 +17,23 @@ const DetaiQuiz = () => {
     const [index, setIndex] = useState(0);
     const [showModalSubmit, setShowModalSubmit] = useState(false);
     const [dataModaleResult, setDataModaleResult] = useState({});
+    const [checked, setChecked] = useState([]);
+
+    useEffect(() => {
+        fetchQuiz();
+    }, [quizId])
+
+    useEffect(() => {
+        if (dataQuiz && dataQuiz.length > 0 && !checked) {
+            setChecked(new Array(dataQuiz.length).fill(false));
+        }
+    }, [dataQuiz]);
+
+    const handleClickQuestion = (index) => {
+        setIndex(index);
+    }
+
+
     const handleClickNextQuestion = () => {
         if (index < dataQuiz.length - 1) {
             setIndex(index + 1);
@@ -34,23 +52,27 @@ const DetaiQuiz = () => {
 
     const handleCheckBock = (questionId, answerId) => {
         let dataQuizClone = _.cloneDeep(dataQuiz);
-        let question = dataQuizClone.find(item => item.id === questionId)
+        let question = dataQuizClone.find(item => item.id === questionId);
+
         if (question && question.answers) {
-            let b = question.answers.map(item => {
+            let updatedAnswers = question.answers.map(item => {
                 if (item.id === answerId) {
                     item.isSelected = !item.isSelected;
                 }
                 return item;
             });
-            question.answers = b;
-        }
-        let index = dataQuizClone.findIndex(item => item.id === questionId)
-        if (index > -1) {
-            dataQuizClone[index] = question;
-            setDataQuiz(dataQuizClone);
+            question.answers = updatedAnswers;
         }
 
+        let updatedChecked = [...checked];
+        let questionIndex = dataQuizClone.findIndex(item => item.id === questionId);
+        updatedChecked[questionIndex] = question.answers.some(answer => answer.isSelected);
+
+        setDataQuiz(dataQuizClone);
+        setChecked(updatedChecked);
     }
+
+
 
     const handleSubmit = async () => {
         let payload = {
@@ -93,9 +115,7 @@ const DetaiQuiz = () => {
 
 
 
-    useEffect(() => {
-        fetchQuiz();
-    }, [quizId])
+
 
     const fetchQuiz = async () => {
         let data = await getQuizById(params.id);
@@ -125,7 +145,14 @@ const DetaiQuiz = () => {
                         <div className="icon"><FaChevronCircleRight onClick={handleClickNextQuestion} /></div>
                     </div>
                 </div>
-                <div className="right-content"></div>
+                <div className="right-content">
+                    <RightContent
+                        dataQuiz={dataQuiz}
+                        checked={checked}
+                        handleClickQuestion={handleClickQuestion}
+                        handleSubmit={handleSubmit}
+                    />
+                </div>
                 <ModalSubmitQuiz
                     show={showModalSubmit}
                     setShow={setShowModalSubmit}

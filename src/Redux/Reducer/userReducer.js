@@ -4,7 +4,8 @@ const INIT = {
         refresh_token: '',
         username: '',
         image: '',
-        role: ''
+        role: '',
+        email: ''
     },
     isAuthenticated: false
 };
@@ -19,14 +20,25 @@ const userReducer = (state = INIT, action) => {
                     refresh_token: action?.payload?.DT?.refresh_token,
                     username: action?.payload?.DT?.username,
                     image: action?.payload?.DT?.image,
-                    role: action?.payload?.DT?.role
+                    role: action?.payload?.DT?.role,
+                    email: action?.payload?.DT?.email  // Kiểm tra cú pháp truy cập email
                 },
                 isAuthenticated: true
+            };
+        case "FETCH_USER_LOGOUT_SUCCESS":
+            return {
+                ...state, account: {
+                    access_token: '',
+                    refresh_token: '',
+                    username: '',
+                    image: '',
+                    role: '',
+                    email: ''
+                }, isAuthenticated: false
             };
         default:
             return state;
     }
 };
-
 
 export default userReducer;

@@ -11,7 +11,7 @@ const ContenQuiz = (props) => {
     const handleCheckBock = (e, quizId, answerId) => {
         props.handleCheckBock(quizId, answerId)
     }
-    console.log(dataQuiz);
+
     return (
         <>
             <div className="content-quiz">

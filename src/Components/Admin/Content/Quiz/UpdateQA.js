@@ -244,6 +244,7 @@ const UpdateQA = () => {
 
         if (res && res.EC === 0) {
             toast.success(res.EM);
+            fetchQuiz();
         }
     }
 
