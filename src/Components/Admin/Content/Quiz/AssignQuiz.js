@@ -15,6 +15,7 @@ const AssignQuiz = (props) => {
         fetchQuiz();
         fetchUser();
     }, [])
+
     const [selectedQuiz, setSelectedQuiz] = useState(listQuiz.length > 0 ? listQuiz[0].id : '');
     const fetchQuiz = async () => {
         let res = await getAllQuiz();

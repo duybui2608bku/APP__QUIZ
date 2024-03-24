@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import _, { forEach } from "lodash";
 import { toast } from "react-toastify";
-import { getAllQuiz, getQuizWithQA, postAnswerForQuestion, postQuestionForQuiz } from "../../../../Service/ApiServeice";
+import { getAllQuiz, getQuizWithQA, postUpsertQA } from "../../../../Service/ApiServeice";
+
 const UpdateQA = () => {
 
     const INIT = [
@@ -46,7 +47,6 @@ const UpdateQA = () => {
     const [question, setQuestion] = useState(INIT);
     const [listQA, setlistQA] = useState([]);
     const [prevSelectedQuiz, setPrevSelectedQuiz] = useState('');
-
     useEffect(() => {
         fetchQuiz();
     }, [])
@@ -142,12 +142,12 @@ const UpdateQA = () => {
     }
 
     const handleChangeFile = (questionId, e) => {
-        let questionClone = _.cloneDeep(question);
-        let index = questionClone.findIndex(item => item.id === questionId);
+        let listQAClone = _.cloneDeep(listQA);
+        let index = listQAClone.qa.findIndex(item => item.id === questionId);
         if (index > -1 && e.target && e.target.files && e.target.files[0]) {
-            questionClone[index].image = e.target.files[0];
-            questionClone[index].imageName = e.target.files[0].name;
-            setQuestion(questionClone);
+            listQAClone.qa[index].imageFile = e.target.files[0];
+            listQAClone.qa[index].imageName = e.target.files[0].name;
+            setlistQA(listQAClone);
         }
     }
 
@@ -173,6 +173,8 @@ const UpdateQA = () => {
 
 
     const handleSubmit = async () => {
+
+        //Validate
         if (_.isEmpty(selectedQuiz)) {
             toast.error("Please select a quiz");
             return;
@@ -180,13 +182,14 @@ const UpdateQA = () => {
 
         let hasError = false;
 
-        const updatedQuestions = question.map((questionItem, questionIndex) => {
+        const updatedQuestions = listQA.qa.map((questionItem, questionIndex) => {
             let updatedAnswers = questionItem.answers.map((answer, answerIndex) => {
                 if (answer.description === '') {
                     toast.error(`Please enter a description for the answer ${answerIndex + 1} for question ${questionIndex + 1} `);
                     answer.isValidate = "is-invalid";
                     hasError = true;
-                } else {
+                }
+                else {
                     answer.isValidate = "";
                 }
                 return answer;
@@ -196,7 +199,12 @@ const UpdateQA = () => {
                 toast.error(`Please enter a description for the question ${questionIndex + 1}`);
                 questionItem.isValidate = "is-invalid";
                 hasError = true;
-            } else {
+            }
+            if (questionItem.imageName === '') {
+                toast.error(`Please chosse a image for ${questionIndex + 1}`);
+                hasError = true;
+            }
+            else {
                 questionItem.isValidate = "";
             }
 
@@ -212,16 +220,33 @@ const UpdateQA = () => {
             return;
         }
 
-        for (const questionItem of updatedQuestions) {
-            const q = await postQuestionForQuiz(selectedQuiz, questionItem.description, questionItem.image);
-            for (const answer of questionItem.answers) {
-                const a = await postAnswerForQuestion(answer.description, answer.isCorrect, q.DT.id);
+        //end validate
+
+        const listQAClone = _.cloneDeep(listQA);
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+
+
+        for (const item of listQAClone.qa) {
+            if (item.imageFile instanceof Blob) {
+                item.imageFile = await toBase64(item.imageFile);
             }
         }
 
-        toast.success("Save Quiz Success");
-        setQuestion(INIT);
+        let res = await postUpsertQA({
+            quizId: listQAClone.quizId,
+            questions: listQAClone.qa
+        });
+
+        if (res && res.EC === 0) {
+            toast.success(res.EM);
+        }
     }
+
     return (
         <>
             <div className="manager-question-container">
@@ -235,9 +260,8 @@ const UpdateQA = () => {
                             }
                         </select>
                     </div>
-                    {listQA && Object.keys(listQA).length > 0
-                        && Object.keys(listQA.qa).map((key, index) => {
-                            const item = listQA.qa[key];
+                    {listQA && listQA.qa && listQA.qa.length > 0
+                        && listQA.qa.map((item, index) => {
                             return (
                                 <div key={item.id} className="add-question-container">
                                     <div className=" col-md-12 row">
@@ -258,7 +282,7 @@ const UpdateQA = () => {
                                             <div className="icon-add-quiz">
                                                 <FaPlusCircle onClick={() => handleAddRemoveQuestion("ADD")} />
                                             </div>
-                                            {question.length > 1 &&
+                                            {listQA.qa.length > 1 &&
                                                 <div className="icon-add-quiz">
                                                     <FaCircleMinus onClick={() => handleAddRemoveQuestion("REMOVE", item.id)} />
                                                 </div>
@@ -269,12 +293,13 @@ const UpdateQA = () => {
                                                     type="file"
                                                     onChange={(e) => handleChangeFile(item.id, e)}
                                                     hidden
+                                                // value={item.imageFile}
                                                 ></input>
                                                 <label htmlFor={`${item.id}`} className="upload" >
                                                     <RiImageAddFill />Upload Image
                                                 </label>
                                                 <div className="status-image">
-                                                    {item.image ? item.imageName : <><FaImages /> No image uploaded!</>}
+                                                    {item.imageFile ? item.imageName : <><FaImages /> No image uploaded!</>}
                                                 </div>
                                             </div>
                                         </div>
@@ -324,7 +349,7 @@ const UpdateQA = () => {
                     }
 
                 </div>
-                {question && question.length > 0 &&
+                {listQA &&
                     <div className="mt-3 d-flex justify-content-center ">
                         <button onClick={handleSubmit} className="btn btn-lg btn-warning">Save Question</button>
                     </div>

@@ -39,7 +39,7 @@ const postRegister = (userEmail, userPassword) => {
 }
 
 const getQuizByUser = () => {
-    return axios.get('api/v1/quiz/all');
+    return axios.get('api/v1/quiz-by-participant');
 }
 
 const getQuizById = (idQuiz) => {
@@ -101,6 +101,9 @@ const getQuizWithQA = (id) => {
     return axios.get(`api/v1/quiz-with-qa/${id}`);
 }
 
+const postUpsertQA = (data) => {
+    return axios.post(`api/v1/quiz-upsert-qa`, { ...data });
+}
 export {
     postCreateUser, getAllUser,
     putUpdateUser, deleteUser,
@@ -111,5 +114,5 @@ export {
     getAllQuiz, deleteQuiz,
     putUpdateQuiz, postQuestionForQuiz,
     postAnswerForQuestion, postAssignQuizToUser,
-    getQuizWithQA
+    getQuizWithQA, postUpsertQA
 };
