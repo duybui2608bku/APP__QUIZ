@@ -10,11 +10,18 @@ import { postLogOut } from '../../Service/ApiServeice';
 import userLogOut from '../../Redux/Action/UserLogOut';
 import { toast } from 'react-toastify';
 import Language from './Language';
+import Profile from './Profile';
+import { useState } from 'react';
 const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [show, setShow] = useState(false);
     const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
     const account = useSelector(state => state.userReducer.account);
+
+    const showModalProfile = () => {
+        setShow(true);
+    }
 
     const handleClickLogin = () => {
         navigate('/login');
@@ -35,34 +42,40 @@ const Header = () => {
     }
 
     return (
-        <Navbar expand="lg" className="bg-body-tertiary box-shadow">
-            <Container>
-                {/* <Navbar.Brand href="#home">DUY BKU</Navbar.Brand> */}
-                <NavLink to="/" className='navbar-brand'>DUY BKU</NavLink>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="me-auto">
-                        <NavLink to="/" className='nav-link'>Home</NavLink>
-                        <NavLink to="/users" className='nav-link'>User</NavLink>
-                        <NavLink to="/admin" className='nav-link'>Admin</NavLink>
-                    </Nav>
-                    <Nav>
-                        {isAuthenticated ? (
-                            <NavDropdown title="Setting" id="basic-nav-dropdown">
-                                <NavDropdown.Item >Profile</NavDropdown.Item>
-                                <NavDropdown.Item onClick={handleLogUot} >Log Out</NavDropdown.Item>
-                            </NavDropdown>
-                        ) : (
-                            <>
-                                <button className='btn-login' onClick={() => handleClickLogin()}>Login</button>
-                                <button className='btn-signUp' onClick={() => handleClickRegister()}>Sign Up</button>
-                            </>
-                        )}
-                        <Language />
-                    </Nav>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
+        <>
+            <Navbar expand="lg" className="bg-body-tertiary box-shadow">
+                <Container>
+                    {/* <Navbar.Brand href="#home">DUY BKU</Navbar.Brand> */}
+                    <NavLink to="/" className='navbar-brand'>DUY BKU</NavLink>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="me-auto">
+                            <NavLink to="/" className='nav-link'>Home</NavLink>
+                            <NavLink to="/users" className='nav-link'>User</NavLink>
+                            <NavLink to="/admin" className='nav-link'>Admin</NavLink>
+                        </Nav>
+                        <Nav>
+                            {isAuthenticated ? (
+                                <NavDropdown title="Setting" id="basic-nav-dropdown">
+                                    <NavDropdown.Item onClick={showModalProfile} >Profile</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={handleLogUot} >Log Out</NavDropdown.Item>
+                                </NavDropdown>
+                            ) : (
+                                <>
+                                    <button className='btn-login' onClick={() => handleClickLogin()}>Login</button>
+                                    <button className='btn-signUp' onClick={() => handleClickRegister()}>Sign Up</button>
+                                </>
+                            )}
+                            <Language />
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+            <Profile
+                show={show}
+                setShow={setShow}
+            ></Profile>
+        </>
     );
 }
 

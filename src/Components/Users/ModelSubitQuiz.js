@@ -3,7 +3,6 @@ import Modal from 'react-bootstrap/Modal';
 const ModalSubmitQuiz = (props) => {
 
     const { show, setShow, dataModaleResult } = props;
-    console.log(dataModaleResult);
     const handleClose = () => setShow(false);
     return (
         <>
@@ -20,9 +19,16 @@ const ModalSubmitQuiz = (props) => {
                     <div>Total answer correct: <b>{dataModaleResult.countCorrect}</b> </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary">
+                    <Button
+                        onClick={() => {
+                            props.showAnswer();
+                            handleClose();
+                        }}
+                        variant="primary"
+                    >
                         Show answer
                     </Button>
+
                     <Button variant="primary"
                         onClick={handleClose}
                     >

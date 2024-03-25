@@ -2,13 +2,14 @@ import CountDown from "./CountDown";
 
 const RightContent = (props) => {
 
-    const { dataQuiz, checked, handleClickQuestion, handleSubmit } = props;
+    const { dataQuiz, checked, handleClickQuestion, handleSubmit, submit } = props;
 
     return (
         <>
             <div className="timer-down">
                 <CountDown
                     handleSubmit={handleSubmit}
+                    submit={submit}
                 />
             </div>
             <div className="list-question">

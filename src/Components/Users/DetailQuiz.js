@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { getQuizById, postSubmitQuiz } from "../../Service/ApiServeice";
 import './DetailQuiz.scss';
 import { FaChevronCircleLeft } from "react-icons/fa";
@@ -9,6 +9,7 @@ import _ from "lodash";
 import ModalSubmitQuiz from "./ModelSubitQuiz";
 import { toast } from 'react-toastify';
 import RightContent from "./Content/RightContent";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
 const DetaiQuiz = () => {
     const params = useParams();
     const quizId = params.id;
@@ -18,7 +19,8 @@ const DetaiQuiz = () => {
     const [showModalSubmit, setShowModalSubmit] = useState(false);
     const [dataModaleResult, setDataModaleResult] = useState({});
     const [checked, setChecked] = useState([]);
-
+    const [submit, setSubmit] = useState(false);
+    const navigate = useNavigate();
     useEffect(() => {
         fetchQuiz();
     }, [quizId])
@@ -28,6 +30,14 @@ const DetaiQuiz = () => {
             setChecked(new Array(dataQuiz.length).fill(false));
         }
     }, [dataQuiz]);
+
+    const backhome = () => {
+        navigate('/users')
+    }
+
+    const showAnswer = () => {
+        setSubmit(true);
+    }
 
     const handleClickQuestion = (index) => {
         setIndex(index);
@@ -138,12 +148,17 @@ const DetaiQuiz = () => {
                     <ContenQuiz dataQuiz={dataQuiz && dataQuiz.length > 0 ? dataQuiz[index] : []}
                         index={index}
                         handleCheckBock={handleCheckBock}
+                        submit={submit}
                     ></ContenQuiz>
                     <div className="footer-quiz">
                         <div className="icon"><FaChevronCircleLeft onClick={handleClickPreQuestion} /></div>
-                        <button className="btn btn-primary" onClick={() => handleSubmit()}>Submit</button>
+                        <button disabled={submit} className="btn btn-primary" onClick={() => handleSubmit()}>Submit</button>
                         <div className="icon"><FaChevronCircleRight onClick={handleClickNextQuestion} /></div>
                     </div>
+                    <div style={{ color: 'blue', fontSize: '30px', cursor: "pointer" }}>
+                        <FaArrowAltCircleLeft onClick={backhome} />
+                    </div>
+
                 </div>
                 <div className="right-content">
                     <RightContent
@@ -151,12 +166,14 @@ const DetaiQuiz = () => {
                         checked={checked}
                         handleClickQuestion={handleClickQuestion}
                         handleSubmit={handleSubmit}
+                        submit={submit}
                     />
                 </div>
                 <ModalSubmitQuiz
                     show={showModalSubmit}
                     setShow={setShowModalSubmit}
                     dataModaleResult={dataModaleResult}
+                    showAnswer={showAnswer}
                 ></ModalSubmitQuiz>
             </div>
         </>

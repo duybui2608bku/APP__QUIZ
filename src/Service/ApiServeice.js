@@ -115,6 +115,17 @@ const getOverView = () => {
     return axios.get('api/v1/overview');
 }
 
+const postChangePassword = (current_password, new_password) => {
+    return axios.post('api/v1/change-password', {
+        current_password, new_password
+    });
+}
+
+const getHistory = () => {
+    return axios.get('api/v1/history');
+}
+
+
 export {
     postCreateUser, getAllUser,
     putUpdateUser, deleteUser,
@@ -126,5 +137,6 @@ export {
     putUpdateQuiz, postQuestionForQuiz,
     postAnswerForQuestion, postAssignQuizToUser,
     getQuizWithQA, postUpsertQA,
-    postLogOut, getOverView
+    postLogOut, getOverView,
+    postChangePassword, getHistory
 };

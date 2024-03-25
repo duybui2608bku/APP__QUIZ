@@ -16,3 +16,13 @@
 .btn-signUp:hover{
     background-color:rgb(53, 49, 49);
 }
+
+.profile-img{
+    height: 200px;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-img img{
+    object-fit: contain;
+}
