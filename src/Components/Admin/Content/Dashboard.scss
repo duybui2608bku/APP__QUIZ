@@ -1,0 +1,40 @@
+.dashboard-container{
+    padding: 20px;
+    .dashboard-title{
+        font-weight: 900;
+        font-size: 30px;
+    }
+
+    .dashboard-content{
+        display: flex;
+        gap: 20px;
+        .dashboard-left{
+            margin-top: 25px;
+            width: 50%;
+            height: 550px;
+            display: flex;
+            flex-wrap: wrap;
+            .dashboard-left-content{
+                width: calc(50% - 20px);
+                border: 1px solid white;
+                border-radius: 15px;
+                margin: 10px;
+                background-color: rgba(255, 255, 255, 0.3);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                font-size: 30px;
+                
+            }
+        }
+    
+        .dashboard-right{
+            width: 50%;
+            margin-top: 25px;
+            height: 550px;
+            display: flex;
+            align-items: center;
+        }
+    }
+}

@@ -8,10 +8,31 @@
         width: 100%;
         overflow: hidden;
         .admin-header{
-            height: 40px;          
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 15px;
+            color: white;
+            .log-out{
+                font-size: 20px;
+                font-weight: 600;
+                border: none;
+                padding: 5px;
+                border-radius: 15px;
+                background: #dddddd45;
+            }
+            .show-sidebar{
+                width: 40px;
+                border-radius: 15px;
+                background-color: #dddddd45;
+                cursor: pointer;
+            }
         }
         .admin-main {
-            height: calc(100vh - 40px);
+            height: calc(100vh - 50px);
+            border: 3px solid orange;
+            border-radius: 15px;
         }
     }
 

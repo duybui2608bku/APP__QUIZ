@@ -17,7 +17,7 @@ const SideBar = (props) => {
                     component={<NavLink to="/"></NavLink>}>
                     <img src={logo} alt="Logo" className="logo-image" />
                     DUY BKU </MenuItem>
-                <MenuItem icon={<FcCurrencyExchange size={24} />} >  Dashboard </MenuItem>
+                <MenuItem component={<NavLink to="/admin"></NavLink>} icon={<FcCurrencyExchange size={24} />} >  Dashboard </MenuItem>
                 <SubMenu label="Tính Năng" icon={<MdFeaturedPlayList size={24} />} >
                     <MenuItem component={<NavLink to="manager-user"></NavLink>} icon={<FcConferenceCall size={24} />}>Quản Lí User</MenuItem>
                     <MenuItem component={<NavLink to="manager-quiz"></NavLink>} icon={<FcBusiness size={24} />}> Quản Lí Bài Quiz </MenuItem>

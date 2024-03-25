@@ -9,13 +9,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { postLogOut } from '../../Service/ApiServeice';
 import userLogOut from '../../Redux/Action/UserLogOut';
 import { toast } from 'react-toastify';
+import Language from './Language';
 const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const isAuthenticated = useSelector(state => state.userReducer.isAuthenticated);
     const account = useSelector(state => state.userReducer.account);
-
-    console.log(account);
 
     const handleClickLogin = () => {
         navigate('/login');
@@ -59,8 +58,7 @@ const Header = () => {
                                 <button className='btn-signUp' onClick={() => handleClickRegister()}>Sign Up</button>
                             </>
                         )}
-
-
+                        <Language />
                     </Nav>
                 </Navbar.Collapse>
             </Container>
